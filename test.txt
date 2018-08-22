@@ -1,9 +1,5 @@
-<<<<<<< HEAD121232
-mysql_fetch_assoc() 和用 mysql_fetch_array() 加上第二个可选参数 MYSQL_ASSOC 完全相同。它仅仅返回关联数
-=======
-mysql_fetch_assoc() 鍜岀敤 mysql_fetch_array() 鍔犱笂绗簩涓彲閫夊弬鏁?MYSQL_ASSOC 瀹屽叏鐩稿悓銆傚畠浠呬粎杩斿洖鍏宠仈鏁扮粍銆傝繖涔熸槸 mysql_fetch_array() 鍒濆鐨勫伐浣滄柟寮忋�?
+定义和用法
+mysql_fetch_assoc() 函数从结果集中取得一行作为关联数组。
 
-鎻愮ず锛氬鏋滃湪鍏宠仈绱㈠紩涔嬪杩橀渶瑕佹暟瀛楃储寮曪紝鐢?mysql_fetch_array()銆?
+返回根据从结果集取得的行生成的关联数组，如果没有更多行，则返回 false。
 
-娉ㄩ噴锛氭湰鍑芥暟杩斿洖鐨勫瓧娈靛悕鏄尯鍒嗗ぇ灏忓啓鐨勩�俤ubo commit
->>>>>>> 57a901910ecf651ddd0c0fc885072b09253c0656
