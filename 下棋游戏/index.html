@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="jquery-3.3.1.min.js"></script>
+    <style>
+        table{
+            border: 1px solid #ff6b00;
+            border-top: none;
+            border-right: none;
+            width: 450px;
+            height: 450px;
+            position: absolute;
+            left: 50%;
+            margin-left: -225px;
+            top: 50%;
+            margin-top: -225px;
+        }
+        td{
+            border:1px solid #ff6b00;
+            border-left:none;
+            border-bottom:none;
+            position:relative;
+        }
+        .no-border-top{
+            border-top:none;
+        }
+        .chess-container{
+            width:100px;
+            height:100px;
+            position:absolute;
+            border:none;
+            border-radius:100px;
+            left:-50px;
+            bottom: -50px;
+            cursor:pointer;
+            z-index:99;
+        }
+        .chess-basket{
+            border:1px solid #f39f9f;
+        }
+        .chess-container-right{
+            right:-50px;
+            left:unset;
+        }
+        .chess-container-top{
+            top:-101px;
+        }
+        .chess-container-top-right{
+            right:-50px;
+            left:unset;
+        }
+        a.chess{
+            width:80px;
+            height:80px;
+            display:block;
+            border-radius:80px;
+            margin:10px auto;
+            position:relative;
+            z-index:100;
+        }
+        a.black-chess{
+            background:-webkit-radial-gradient(#333 0%, #888 100%);
+            background:-moz-radial-gradient(#333 0%, #888 100%);
+            background:-o-radial-gradient(#333 0%, #888 100%);
+            background:radial-gradient(#333 0%, #888 100%);
+        }
+        a.chess:hover{
+            -webkit-box-shadow:0 0 15px #ff0000;
+            -moz-box-shadow:0 0 15px #ff0000;
+            -o-box-shadow:0 0 15px #ff0000;
+            box-shadow:0 0 15px #ff0000;
+        }
+        a.red-chess{
+            background:-webkit-radial-gradient(#ff0000 0%, #ff6400 100%);
+            background:-moz-radial-gradient(#ff0000 0%, #ff6400 100%);
+            background:-o-radial-gradient(#ff0000 0%, #ff6400 100%);
+            background:radial-gradient(#ff0000 0%, #ff6400 100%);
+        }
+    </style>
+</head>
+<body>
+    <!--<div id="container" style="width:300px;height:300px;overflow:hidden;position:relative;">
+        <div id="content" style="position:absolute;left:0;top:0;">
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+            <p>滚动条滚动条滚动条滚动条滚动条滚动条</p>
+        </div>
+        <div style="width:15px;height:100%;background:#ff0000;position:absolute;right:0;top:0;">
+            <div id="scroll" style="width:100%;position:absolute;top:0;left:0;background:#000;"></div>
+        </div>
+    </div>-->
+    <table cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="no-border-top">
+                <div class="chess-container chess-basket chess-container-top" data-index="1">
+                    <a class="chess black-chess"></a>
+                </div>
+                <div class="chess-container end-container" data-index="4">
+                    <a class="chess black-chess"></a>
+                </div>
+            </td>
+            <td class="no-border-top">
+                <div class="chess-container chess-basket chess-container-top" data-index="2">
+                </div>
+                <div class="chess-container chess-basket chess-container-top chess-container-top-right" data-index="3">
+                    <a class="chess red-chess"></a>
+                </div>
+                <div class="chess-container end-container" data-index="5">
+                </div>
+                <div class="chess-container chess-container-right end-container" data-index="6">
+                    <a class="chess red-chess"></a>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="chess-container" data-index="7">
+                    <a class="chess black-chess"></a>
+                </div>
+            </td>
+            <td>
+                <div class="chess-container" data-index="8">
+                </div>
+                <div class="chess-container chess-container-right" data-index="9">
+                    <a class="chess red-chess"></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <script>
+        var which=1;//1:黑棋，2：红棋
+        var topClass=false;
+        var chess=null;
+        var canPlay=true;
+        $("a.chess").click(function(e){
+            if(canPlay){
+                var evt=e||window.event;
+                evt.stopPropagation();
+                chess=this;
+                if($(this).parent(".chess-container").hasClass("chess-container-top")){
+                    topClass=true;
+                }
+                else{
+                    topClass=false;
+                }
+            }
+        });
+        $(".chess-container").click(function(e){
+            if(canPlay){
+                if(chess==null){
+                    alert("没有选择棋子");
+                    return;
+                }
+                else{
+                    if($(this).hasClass("chess-container-top")&&topClass){
+                        alert("不能在顶部间移动棋子");
+                        return;
+                    }
+                }
+                //计算是否在相邻的格子间移动
+                var startPos=parseInt($(chess).parent(".chess-container").data("index"));
+                var endPos=parseInt($(this).data("index"));
+                var diff=Math.abs(startPos-endPos);
+                if(diff!=1&&diff!=3){
+                    alert("只能在相邻的两个格子间移动");
+                    return;
+                }
+                var evt=e||window.event;
+                evt.stopPropagation();
+                var len=$(this).children("a.chess").length;
+                if(len==0&&chess){
+                    if($(chess).hasClass("red-chess")&&which===1){
+                        alert("该黑棋走");
+                    }
+                    else if($(chess).hasClass("black-chess")&&which===2){
+                        alert("该红棋走");
+                    }
+                    else{
+                        $(this).append(chess);
+                        chess=null;
+                        switch(which){
+                            case 1:which=2;break;
+                            case 2:which=1;break;
+                        }
+                        setTimeout(function(){
+                            isGameOver();
+                            canGoAgain();
+                        },500);
+                    }
+                }
+                else{
+                    alert("每次只能走一步");
+                }
+            }
+        });
+        function isGameOver(){
+            var elems=$(".chess-container-top").children("a");
+            var allRed=0;
+            var allBlack=0;
+            var winner=-1;
+            var isFull=false;//当前行是否是同种颜色的棋子
+            if(elems.length===3){
+                $(".chess-container-top").children("a").each(function(){
+                    if($(this).hasClass("black-chess")){
+                        allBlack++;
+                    }
+                    if($(this).hasClass("red-chess")){
+                        allRed++;
+                    }
+                });
+                if(allBlack===3){
+                    winner=1;
+                    isFull=true;
+                }
+                if(allRed===3){
+                    winner=2;
+                    isFull=true;
+                }
+                $(".end-container").children("a").each(function(){
+                    if($(this).hasClass("black-chess")){
+                        allBlack++;
+                    }
+                    if($(this).hasClass("red-chess")){
+                        allRed++;
+                    }
+                });
+            }
+            if(allRed===3&&allBlack===3&&isFull){
+                canPlay=false;
+                if(winner===1){
+                    alert("红球获胜，本轮游戏结束");
+                }
+                if(winner===2){
+                    alert("黑球获胜，本轮游戏结束");
+                }
+            }
+        }
+        function canGoAgain(){
+            var canGo=false;
+            if(canPlay){
+                if(which===1){
+                    canGo=changePos(".black-chess");
+                    if(!canGo){
+                        alert("红球需要让一步");
+                        which=2;
+                    }
+                }
+                if(which===2){
+                    canGo=changePos(".red-chess");
+                    if(!canGo){
+                        alert("黑球需要让一步");
+                        which=1;
+                    }
+                }
+            }
+        }
+        function changePos(className){
+            //debugger;
+            var canGo=false;
+            $(className).each(function(){
+                var thisPos=parseInt($(this).parent(".chess-container").data("index"));
+                if($(this).parent(".chess-container").hasClass("chess-container-top")){
+                    if($(".chess-container[data-index='"+(thisPos+3)+"']").children("a").length===0){
+                        canGo=true;
+                    }
+                }
+                else{
+                    if(!canGo){
+                        var container=$(".chess-container[data-index='"+(thisPos+3)+"']");
+                        if(container.length!==0){
+                            if(container.children("a").length===0){
+                                canGo=true;
+                            }
+                        }
+                        container=$(".chess-container[data-index='"+(thisPos-3)+"']");
+                        if(container.length!==0){
+                            if(container.children("a").length===0){
+                                canGo=true;
+                            }
+                        }
+                        if(thisPos%3===0){
+                            if($(".chess-container[data-index='"+(thisPos-1)+"']").children("a").length===0){
+                                canGo=true;
+                            }
+                        }
+                        if(thisPos%3===1){
+                            if($(".chess-container[data-index='"+(thisPos+1)+"']").children("a").length===0){
+                                canGo=true;
+                            }
+                        }
+                        if(thisPos%3===2){
+                            if($(".chess-container[data-index='"+(thisPos+1)+"']").children("a").length===0){
+                                canGo=true;
+                            }
+                            if($(".chess-container[data-index='"+(thisPos-1)+"']").children("a").length===0){
+                                canGo=true;
+                            }
+                        }
+                    }
+                }
+            });
+            return canGo;
+        }
+    </script>
+    <script>
+        var isMouseOver = false;
+        var py = 0;
+        var containerH = 0;
+        var height = 0;
+        var diffH = 0;
+        $(document).ready(function () {
+            height = $("#content").height();
+            containerH = $("#container").height();
+            diffH = height - containerH;
+            if(diffH>0){
+                if (diffH > containerH) {
+                    $("#scroll").height(30);
+                }
+                else {
+                    $("#scroll").height((containerH - diffH));
+                }
+            }
+        });
+        $("#scroll").on("mousedown", function (e) {
+            var evt = e || window.event;
+            py = evt.clientY;
+            isMouseOver = true;
+
+        });
+        $("#scroll").on("mouseup", function (e) {
+            var evt = e || window.event;
+            py = evt.clientY;
+            isMouseOver = false;
+
+        });
+        $("body").mousemove(function (e) {
+            if(isMouseOver){
+                var evt = e || window.event;
+                var y = evt.clientY;
+                var top = parseFloat($("#scroll").css("top"));
+                var h = top + (y - py);
+                if(h<=0){
+                    h = 0;
+                }
+                else if (h > diffH) {
+                    h = ($("#container").height()-oh);
+                }
+                $("#scroll").css({ "top": h + "px" });
+                $("#content").css({ "top": -h + "px" });
+                py = y;
+            }
+        });
+    </script>
+</body>
+</html>
