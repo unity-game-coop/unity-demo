@@ -1,5 +1,6 @@
-mysql_fetch_assoc() 和用 mysql_fetch_array() 加上第二个可选参数 MYSQL_ASSOC 完全相同。它仅仅返回关联数组。这也是 mysql_fetch_array() 初始的工作方式。
+鏂板缓鏂囨湰鏂囨。  dubo commit
 
-提示：如果在关联索引之外还需要数字索引，用 mysql_fetch_array()。
+锘挎柊寤烘枃123
+鍐茬獊娴嬭瘯222222222222222222222
 
-注释：本函数返回的字段名是区分大小写的。
+鍐茬獊娴嬭瘯
